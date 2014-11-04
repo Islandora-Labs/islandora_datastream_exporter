@@ -11,26 +11,26 @@ function islandora_datastream_exporter_drush_command() {
   $commands = array();
 
   $commands['islandora_datastream_export'] = array(
-    'description' => dt('Exports a specified datastream from all objects given a Solr filter query.'),
+    'description' => dt('Exports a specified datastream from all objects given a fielded Solr query.'),
     'drupal dependencies' => array(
       'islandora',
       'islandora_solr',
     ),
     'options' => array(
       'field' => array(
-        'description' => t('The Solr field being queried.'),
+        'description' => dt('The Solr field being queried.'),
         'required' => TRUE,
       ),
       'value' => array(
-        'description' => t('The value to be searched for within the Solr field.'),
+        'description' => dt('The value to be searched for within the Solr field.'),
         'required' => TRUE,
       ),
       'dsid' => array(
-        'description' => t('The datastream id of to be exported datastream.'),
+        'description' => dt('The datastream id of to be exported datastream.'),
         'required' => TRUE,
       ),
       'target' => array(
-        'description' => t('The directory to export the datastreams to.'),
+        'description' => dt('The directory to export the datastreams to.'),
         'required' => TRUE,
       ),
     ),
@@ -56,6 +56,7 @@ function drush_islandora_datastream_exporter_islandora_datastream_export_validat
   ));
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildQuery($query);
+  $qp->solrLimit = 1;
   $qp->executeQuery(FALSE);
   if (empty($qp->islandoraSolrResult)) {
     return drush_set_error('Invalid Solr query', dt('The specified query !query is not valid. Please ensure you have a correct and escaped query.', array('!query' => $query)));
@@ -131,10 +132,11 @@ function islandora_datastream_export_batch_operation($field, $value, $dsid, $tar
   $results = $qp->islandoraSolrResult['response']['objects'];
   foreach ($results as $solr_doc) {
     module_load_include('inc', 'islandora', 'includes/mimetype.utils');
+    module_load_include('inc', 'islandora', 'utilities');
     $object = islandora_object_load($solr_doc['PID']);
     if (isset($object[$dsid])) {
       $extension = islandora_get_extension_for_mimetype($object[$dsid]->mimeType);
-      $file_pid = str_replace(':', '_', $object->id);
+      $file_pid = islandora_escape_pid_for_function($object->id);
       $target_directory = "$target/{$file_pid}_$dsid.$extension";
       $object[$dsid]->getContent($target_directory);
       $success = TRUE;
