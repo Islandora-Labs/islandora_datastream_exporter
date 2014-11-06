@@ -61,6 +61,10 @@ function drush_islandora_datastream_exporter_islandora_datastream_export_validat
   if (empty($qp->islandoraSolrResult)) {
     return drush_set_error('Invalid Solr query', dt('The specified query !query is not valid. Please ensure you have a correct and escaped query.', array('!query' => $query)));
   }
+  elseif ($qp->islandoraSolrResult['response']['numFound'] === 0) {
+    return drush_set_error('No result Solr query', dt('The specified query !query returned no results.', array('!query' => $query)));
+
+  }
 }
 
 /**
