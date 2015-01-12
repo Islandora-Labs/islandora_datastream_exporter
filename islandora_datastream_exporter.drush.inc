@@ -31,7 +31,7 @@ function islandora_datastream_exporter_drush_command() {
       ),
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_export --target=/tmp --query=PID:"islandora:9" --dsid=DC' => dt('Exporting datastream from object.'),
+      'drush -u 1 islandora_datastream_export --target=/tmp --query=PID:\"islandora:9\" --dsid=DC' => dt('Exporting datastream from object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
