@@ -3,7 +3,7 @@
 ## Introduction
 
 This module provides a Drush script that can be used to bulk export datastreams
-given a fielded Solr query.
+given a Solr query.
 
 ## Requirements
 
@@ -32,20 +32,20 @@ Exports a specified datastream from all objects given a Solr filter query.
 
 Examples:
  drush -u 1 islandora_datastream_export  Exporting datastream from object.
- --target=/tmp --field=* --value=*
+ --target=/tmp --query=*:*
  --dsid=DC
 
 Options:
  --dsid                                    The datastream id of to be exported datastream. Required.
- --field                                   The Solr field being queried. Required.
- --target                                  The directory to export the datastreams to. Required.
+ --query                                   The Solr query to be ran. Required.
  --value                                   The value to be searched for within the Solr field. Required.
  ```
 
 It's to be noted that when specifying a value that some values will need to be
 escaped as the value is passed directly to Solr. An example of this is for the
 PID field where islandora:test will not work, while "islandora:test" or
-islandora\:test will.
+islandora\:test will. For queries taking advantage of Lucene syntax all parts
+of the query string must be provided as escaped.
 
 Finally the user option (-u) needs to be specified or errors could be
 encountered when attempting to write the contents of the datastream to a file.
