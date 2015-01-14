@@ -17,12 +17,8 @@ function islandora_datastream_exporter_drush_command() {
       'islandora_solr',
     ),
     'options' => array(
-      'field' => array(
-        'description' => dt('The Solr field being queried.'),
-        'required' => TRUE,
-      ),
-      'value' => array(
-        'description' => dt('The value to be searched for within the Solr field.'),
+      'query' => array(
+        'description' => dt('The Solr query to be ran.'),
         'required' => TRUE,
       ),
       'dsid' => array(
@@ -35,7 +31,7 @@ function islandora_datastream_exporter_drush_command() {
       ),
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_export --target=/tmp --field=* --value=* --dsid=DC' => dt('Exporting datastream from object.'),
+      'drush -u 1 islandora_datastream_export --target=/tmp --query=PID:\"islandora:9\" --dsid=DC' => dt('Exporting datastream from object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
@@ -50,10 +46,7 @@ function drush_islandora_datastream_exporter_islandora_datastream_export_validat
   if (!is_writable($directory)) {
     return drush_set_error('This is not is a directory', dt('The specified target directory, !dir, is not valid.', array('!dir' => $directory)));
   }
-  $query = $query = format_string('!field:!value', array(
-    '!field' => drush_get_option('field'),
-    '!value' => drush_get_option('value'),
-  ));
+  $query = drush_get_option('query');
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildQuery($query);
   $qp->solrLimit = 1;
@@ -83,8 +76,7 @@ function islandora_datastream_export_create_batch() {
     'operations' => array(
       array('islandora_datastream_export_batch_operation',
         array(
-          drush_get_option('field'),
-          drush_get_option('value'),
+          drush_get_option('query'),
           drush_get_option('dsid'),
           drush_get_option('target'),
         ),
@@ -101,10 +93,8 @@ function islandora_datastream_export_create_batch() {
 /**
  * Constructs and performs the datastream export operation.
  *
- * @param string $field
- *   The Solr field to be queried.
- * @param string $value
- *   The value to queried for.
+ * @param string $query
+ *   The Solr query to be used for searching.
  * @param string $dsid
  *   The datastream ID of the object to be exported.
  * @param string $target
@@ -112,13 +102,9 @@ function islandora_datastream_export_create_batch() {
  * @param array $context
  *   The context of the Drupal batch.
  */
-function islandora_datastream_export_batch_operation($field, $value, $dsid, $target, &$context) {
+function islandora_datastream_export_batch_operation($query, $dsid, $target, &$context) {
   $sandbox = &$context['sandbox'];
   $export_objects = 10;
-  $query = format_string('!field:!value', array(
-    '!field' => $field,
-    '!value' => $value,
-  ));
   $qp = new IslandoraSolrQueryProcessor();
   $qp->buildQuery($query);
   if (!isset($sandbox['offset'])) {
