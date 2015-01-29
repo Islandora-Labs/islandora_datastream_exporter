@@ -28,24 +28,23 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 Output of ```drush islandora_datastream_export --help:```
 
 ```
-Exports a specified datastream from all objects given a Solr filter query.
+Exports a specified datastream from all objects given a fielded Solr query.
 
 Examples:
  drush -u 1 islandora_datastream_export  Exporting datastream from object.
- --target=/tmp --query=*:*
- --dsid=DC
+ --target=/tmp --query=PID:\"islandora:9\" --dsid=DC
 
 Options:
  --dsid                                    The datastream id of to be exported datastream. Required.
  --query                                   The Solr query to be ran. Required.
- --value                                   The value to be searched for within the Solr field. Required.
- ```
+ --target                                  The directory to export the datastreams to. Required.
+  ```
 
 It's to be noted that when specifying a value that some values will need to be
 escaped as the value is passed directly to Solr. An example of this is for the
 PID field where islandora:test will not work, while "islandora:test" or
 islandora\:test will. For queries taking advantage of Lucene syntax all parts
-of the query string must be provided as escaped.
+of the query string must be provided as escaped. Boolean logic is allowed.
 
 Finally the user option (-u) needs to be specified or errors could be
 encountered when attempting to write the contents of the datastream to a file.
@@ -55,7 +54,6 @@ encountered when attempting to write the contents of the datastream to a file.
 Current maintainers:
 
 * [discoverygarden](https://github.com/discoverygarden)
-* [Another Maintainer](https://github.com/maintainer_github)
 
 This project has been sponsored by:
 
