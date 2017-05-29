@@ -53,6 +53,7 @@ encountered when attempting to write the contents of the datastream to a file.
 
 Current maintainers:
 
+* [William Panting](https://github.com/willtp87)
 * [discoverygarden](https://github.com/discoverygarden)
 
 This project has been sponsored by:
