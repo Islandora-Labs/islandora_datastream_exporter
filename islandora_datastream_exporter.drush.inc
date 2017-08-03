@@ -25,13 +25,13 @@ function islandora_datastream_exporter_drush_command() {
         'description' => dt('The datastream id of to be exported datastream.'),
         'required' => TRUE,
       ),
-      'target' => array(
+      'export_target' => array(
         'description' => dt('The directory to export the datastreams to.'),
         'required' => TRUE,
       ),
     ),
     'examples' => array(
-      'drush -u 1 islandora_datastream_export --target=/tmp --query=PID:\"islandora:9\" --dsid=DC' => dt('Exporting datastream from object.'),
+      'drush -u 1 islandora_datastream_export --export_target=/tmp --query=PID:\"islandora:9\" --dsid=DC' => dt('Exporting datastream from object.'),
     ),
     'bootstrap' => DRUSH_BOOTSTRAP_DRUPAL_LOGIN,
   );
@@ -42,7 +42,7 @@ function islandora_datastream_exporter_drush_command() {
  * Batch process validation handler.
  */
 function drush_islandora_datastream_exporter_islandora_datastream_export_validate() {
-  $directory = drush_get_option('target');
+  $directory = drush_get_option('export_target');
   if (!is_writable($directory)) {
     return drush_set_error('This is not is a directory', dt('The specified target directory, !dir, is not valid.', array('!dir' => $directory)));
   }
@@ -78,7 +78,7 @@ function islandora_datastream_export_create_batch() {
         array(
           drush_get_option('query'),
           drush_get_option('dsid'),
-          drush_get_option('target'),
+          drush_get_option('export_target'),
         ),
       ),
     ),
@@ -98,7 +98,7 @@ function islandora_datastream_export_create_batch() {
  * @param string $dsid
  *   The datastream ID of the object to be exported.
  * @param string $target
- *   The target directory to export the files to.
+ *   The export_target directory to export the files to.
  * @param array $context
  *   The context of the Drupal batch.
  */
