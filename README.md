@@ -42,8 +42,8 @@ Options:
 
 It's to be noted that when specifying a value that some values will need to be
 escaped as the value is passed directly to Solr. An example of this is for the
-PID field where islandora:test will not work, while "islandora:test" or
-islandora\:test will. For queries taking advantage of Lucene syntax all parts
+PID field where `islandora:test` will not work, while `"islandora:test"` or
+`islandora\:test` will. For queries taking advantage of Lucene syntax all parts
 of the query string must be provided as escaped. Boolean logic is allowed.
 
 Finally the user option (-u) needs to be specified or errors could be
