@@ -32,12 +32,12 @@ Exports a specified datastream from all objects given a fielded Solr query.
 
 Examples:
  drush -u 1 islandora_datastream_export  Exporting datastream from object.
- --target=/tmp --query=PID:\"islandora:9\" --dsid=DC
+ --export_target=/tmp --query=PID:\"islandora:9\" --dsid=DC
 
 Options:
  --dsid                                    The datastream id of to be exported datastream. Required.
  --query                                   The Solr query to be ran. Required.
- --target                                  The directory to export the datastreams to. Required.
+ --export_target                                  The directory to export the datastreams to. Required.
   ```
 
 It's to be noted that when specifying a value that some values will need to be
