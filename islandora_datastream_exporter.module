@@ -3,3 +3,23 @@
  * @file
  * Module file for islandora_datastream_exporter.
  */
+
+/**
+ * Implements hook_islandora_datastream_exporter_pid_source().
+ */
+function islandora_datastream_exporter_islandora_datastream_exporter_pid_source() {
+  return array(
+    'islandora_datastream_exporter_solr_query' => array(
+      'file' => array('inc', 'islandora_datastream_exporter', 'includes/solr.query'),
+      'validation_callback' => 'islandora_datastream_exporter_solr_query_validate',
+      'pid_source_callback' => 'islandora_datastream_exporter_solr_query_pid_source',
+      'description' => t('Takes a query in the form of a string representing a Solr query.'),
+    ),
+    'islandora_datastream_exporter_ri_query' => array(
+      'file' => array('inc', 'islandora_datastream_exporter', 'includes/ri.query'),
+      'validation_callback' => 'islandora_datastream_exporter_ri_query_validate',
+      'pid_source_callback' => 'islandora_datastream_exporter_ri_query_pid_source',
+      'description' => t('Takes the path to a plain text file containing an RI query in SPARQL format. Query results should return a ?pid parameter, and contain the string "%offset%" representing the amount the results should be offset by on each pass.'),
+    ),
+  );
+}
