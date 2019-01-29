@@ -3,7 +3,7 @@
 ## Introduction
 
 This module provides a Drush script that can be used to bulk export datastreams
-given a Solr query.
+given a query to a source of PIDs.
 
 ## Requirements
 
@@ -25,20 +25,24 @@ Having problems or solved a problem? Check out the Islandora google groups for a
 * [Islandora Dev Group](https://groups.google.com/forum/?hl=en&fromgroups#!forum/islandora-dev)
 
 ## Usage
-Output of ```drush islandora_datastream_export --help:```
+Output of `drush islandora_datastream_export --help:`
 
 ```
 Exports a specified datastream from all objects given a fielded Solr query.
 
 Examples:
- drush -u 1 islandora_datastream_export  Exporting datastream from object.
- --export_target=/tmp --query=PID:\"islandora:9\" --dsid=DC
+ drush -u 1 islandora_datastream_export  Exporting datastream from object via default Solr query.
+ --export_target=/tmp
+ --query=PID:\"islandora:9\" --dsid=DC
 
 Options:
  --dsid                                    The datastream id of to be exported datastream. Required.
- --query                                   The Solr query to be ran. Required.
- --export_target                                  The directory to export the datastreams to. Required.
-  ```
+ --export_target                           The directory to export the datastreams to. Required.
+ --query                                   The query to be ran. Required.
+ --query_type                              The type of query to run. Check the output of "drush islandora_datastream_export_types" for a list. Defaults to "islandora_datastream_exporter_solr_query".
+```
+
+### Solr Backend
 
 It's to be noted that when specifying a value that some values will need to be
 escaped as the value is passed directly to Solr. An example of this is for the
@@ -48,6 +52,27 @@ of the query string must be provided as escaped. Boolean logic is allowed.
 
 Finally the user option (-u) needs to be specified or errors could be
 encountered when attempting to write the contents of the datastream to a file.
+
+### RI Backend
+
+To use the RI Backend:
+
+* Queries should be written in SPARQL format
+* Queries should `SELECT` a `?pid`
+* The contents of the query should be saved in a plaintext file, and provided
+  to the drush script as the `--query` parameter
+* To facilitate cycling through objects, the query should contain the string
+  `%offset%`, which will be replaced by the current offset of the batch. For
+  example:
+
+```
+SELECT ?pid
+FROM <#ri>
+WHERE {
+  ?pid <fedora-rels-ext:isMemberOfCollection> <info:fedora/some:collection>
+}
+OFFSET %offset%
+```
 
 ## Maintainers/Sponsors
 
