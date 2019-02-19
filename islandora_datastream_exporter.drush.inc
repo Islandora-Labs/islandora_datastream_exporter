@@ -122,7 +122,7 @@ function islandora_datastream_export_batch_operation($type, $query, $dsid, $targ
     call_user_func_array('module_load_include', $type['file']);
   }
   module_load_include('inc', 'islandora', 'includes/mimetype.utils');
-  module_load_include('inc', 'islandora', 'utilities');
+  module_load_include('inc', 'islandora', 'includes/utilities');
   $results = call_user_func_array($type['pid_source_callback'], array(
     $query,
     $export_objects,
